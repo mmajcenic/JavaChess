@@ -39,12 +39,6 @@ public abstract class SearchAlgorithm {
         sortedRootMoves.clear();
     }
 
-    public static List<Move> getRootMoves() {
-        return rootMoves;
-    }
-
-    public static int enPassantCount = 0;
-
     public static List<Move> sortMoves(List<Move> moves) {
         moves.forEach(move -> {
             Chessboard.makeMove(move);
@@ -72,4 +66,5 @@ public abstract class SearchAlgorithm {
     public static int getMaximumSearchDepth() {
         return maximumSearchDepth;
     }
+
 }

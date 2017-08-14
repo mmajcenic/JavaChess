@@ -2,6 +2,7 @@ package hr.tvz.chess.gui;
 
 import hr.tvz.chess.Main;
 import hr.tvz.chess.engine.Castling;
+import hr.tvz.chess.engine.Chessboard;
 import hr.tvz.chess.engine.Move;
 import hr.tvz.chess.engine.algorithms.SearchAlgorithm;
 import hr.tvz.chess.pieces.common.AbstractChessPiece;
@@ -26,9 +27,12 @@ public class ChessboardGUI extends Pane {
 
     private static ChessboardGUI instance;
 
+    private long humanTime = System.currentTimeMillis();
+
     public ChessboardGUI() {
 
         instance = this;
+        instance.setId("chessboard");
         instance.setMinHeight(630);
         instance.setMinWidth(660);
         instance.getStyleClass().add("mainChessboard");
@@ -84,7 +88,7 @@ public class ChessboardGUI extends Pane {
                 int newMovePosition = newMoveData.getPosition();
 
                 newValue.setSelected(false);
-                Move lastMove = hr.tvz.chess.engine.Chessboard.getLastMove();
+                Move lastMove = Chessboard.getLastMove();
                 Move move = null;
                 if (oldMovePosition / 8 == 1 && newMovePosition / 8 == 0 && oldMoveData.isCurrentPlayerPieceType(PieceType.PAWN)) {
                     move = new Move(oldMovePosition % 8, newMovePosition % 8, newMoveData, getPromotion(oldMoveData), oldMoveData);
@@ -112,14 +116,23 @@ public class ChessboardGUI extends Pane {
 
                 if (move != null && hr.tvz.chess.engine.Chessboard.generatePossibleMoves().contains(move)) {
 
-                    hr.tvz.chess.engine.Chessboard.makeMove(move);
+                    Chessboard.makeMove(move);
 
                     drawChesspieces();
 
-                    hr.tvz.chess.engine.Chessboard.changePlayer();
+                    UserControls userControls = (UserControls) this.getScene().lookup("#controls");
+                    String notation = String.format("r%dc%d -> r%dc%d",
+                            move.getOldPositionRow(),
+                            move.getOldPositionColumn(),
+                            move.getNewPositionRow(),
+                            move.getNewPositionColumn());
+                    userControls.addMoveToHistory(new MoveHistoryEntry(notation, userControls.getAlgorithm(), System.currentTimeMillis() - humanTime));
+                    Chessboard.changePlayer();
 
-                    if (!Main.pvp) {
+                    if (!Main.isPvp()) {
                         makeAiMove(move);
+                    } else {
+                        setHumanTime(System.currentTimeMillis());
                     }
                 }
 
@@ -134,13 +147,23 @@ public class ChessboardGUI extends Pane {
 
     public void makeAiMove(Move move) {
         Platform.runLater(() -> {
+            long now = System.currentTimeMillis();
             Move move1 = Main.getSearchAlgorithm().search(move);
+            long elapsed = System.currentTimeMillis() - now;
+            UserControls userControls = (UserControls) this.getScene().lookup("#controls");
+            String notation = String.format("r%dc%d -> r%dc%d",
+                    move1.getOldPositionRow(),
+                    move1.getOldPositionColumn(),
+                    move1.getNewPositionRow(),
+                    move1.getNewPositionColumn());
+            userControls.addMoveToHistory(new MoveHistoryEntry(notation, userControls.getAlgorithm(), elapsed));
             SearchAlgorithm.clearTranspositionTable();
             SearchAlgorithm.clearRootTable();
             SearchAlgorithm.clearSortedRootMoves();
-            hr.tvz.chess.engine.Chessboard.makeMove(move1);
-            hr.tvz.chess.engine.Chessboard.changePlayer();
+            Chessboard.makeMove(move1);
+            Chessboard.changePlayer();
             drawChesspieces();
+            humanTime = System.currentTimeMillis();
         });
     }
 
@@ -161,6 +184,18 @@ public class ChessboardGUI extends Pane {
         }
         if (!Main.isWhiteIsHuman()) {
             instance.setRotate(180);
+            instance.getChildren().forEach(node -> {
+                if(node instanceof Label) {
+                    node.setRotate(180);
+                }
+            });
+        } else {
+            instance.setRotate(0);
+            instance.getChildren().forEach(node -> {
+                if(node instanceof Label) {
+                    node.setRotate(0);
+                }
+            });
         }
     }
 
@@ -193,8 +228,16 @@ public class ChessboardGUI extends Pane {
         toggleButton.setUserData(hr.tvz.chess.engine.Chessboard.getPiece(i / 8, i % 8));
         if (!Main.isWhiteIsHuman()) {
             toggleButton.setRotate(180);
+        } else {
+            toggleButton.setRotate(0);
         }
     }
 
+    public long getHumanTime() {
+        return humanTime;
+    }
 
+    public void setHumanTime(long humanTime) {
+        this.humanTime = humanTime;
+    }
 }

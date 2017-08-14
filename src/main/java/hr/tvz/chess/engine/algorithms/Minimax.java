@@ -21,6 +21,7 @@ public class Minimax extends SearchAlgorithm {
         int bestValue = maximizes ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
         for (Move moveFromList : moves) {
+            addToCounter(depth);
             Chessboard.makeMove(moveFromList);
             Chessboard.changePlayer();
             Move returnMove = minimax(depth - 1, moveFromList, !maximizes);
@@ -39,7 +40,6 @@ public class Minimax extends SearchAlgorithm {
             }
         }
         move.setValue(bestValue);
-        addToCounter(depth);
         return move;
     }
 

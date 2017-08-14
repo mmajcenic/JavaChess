@@ -179,7 +179,7 @@ public class Pawn extends AbstractChessPiece {
 
             //dva gore
             if (Chessboard.isEmptyPiece(r + 1, c)
-                    && Chessboard.isEmptyPiece(r + 2, c) && i <= 16) {
+                    && Chessboard.isEmptyPiece(r + 2, c) && i < 16) {
                 oldPiece = Chessboard.getPiece(r + 2, c);
                 Chessboard.setPiece(r + 2, c, Chessboard.getPiece(r, c));
                 Chessboard.setPiece(r, c, new EmptySquare());

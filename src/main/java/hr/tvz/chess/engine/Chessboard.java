@@ -29,74 +29,85 @@ public class Chessboard {
 
     private static boolean blackCastlingQueenSide = true;
 
-    private static AbstractChessPiece chessBoard[][] = {
-            {new Rook(Color.BLACK),
-                    new Knight(Color.BLACK),
-                    new Bishop(Color.BLACK),
-                    new Queen(Color.BLACK),
-                    new King(Color.BLACK),
-                    new Bishop(Color.BLACK),
-                    new Knight(Color.BLACK),
-                    new Rook(Color.BLACK)},
-            {new Pawn(Color.BLACK),
-                    new Pawn(Color.BLACK),
-                    new Pawn(Color.BLACK),
-                    new Pawn(Color.BLACK),
-                    new Pawn(Color.BLACK),
-                    new Pawn(Color.BLACK),
-                    new Pawn(Color.BLACK),
-                    new Pawn(Color.BLACK)},
-            {new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare()},
-            {new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare()},
-            {new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare()},
-            {new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare(),
-                    new EmptySquare()},
-            {new Pawn(Color.WHITE),
-                    new Pawn(Color.WHITE),
-                    new Pawn(Color.WHITE),
-                    new Pawn(Color.WHITE),
-                    new Pawn(Color.WHITE),
-                    new Pawn(Color.WHITE),
-                    new Pawn(Color.WHITE),
-                    new Pawn(Color.WHITE)},
-            {new Rook(Color.WHITE),
-                    new Knight(Color.WHITE),
-                    new Bishop(Color.WHITE),
-                    new Queen(Color.WHITE),
-                    new King(Color.WHITE),
-                    new Bishop(Color.WHITE),
-                    new Knight(Color.WHITE),
-                    new Rook(Color.WHITE)},
-    };
+    private static AbstractChessPiece chessBoard[][];
+
+    private static AbstractChessPiece[][] getInitalChessBoardPosition() {
+        AbstractChessPiece chessBoard[][] = {
+                {new Rook(Color.BLACK),
+                        new Knight(Color.BLACK),
+                        new Bishop(Color.BLACK),
+                        new Queen(Color.BLACK),
+                        new King(Color.BLACK),
+                        new Bishop(Color.BLACK),
+                        new Knight(Color.BLACK),
+                        new Rook(Color.BLACK)},
+                {new Pawn(Color.BLACK),
+                        new Pawn(Color.BLACK),
+                        new Pawn(Color.BLACK),
+                        new Pawn(Color.BLACK),
+                        new Pawn(Color.BLACK),
+                        new Pawn(Color.BLACK),
+                        new Pawn(Color.BLACK),
+                        new Pawn(Color.BLACK)},
+                {new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare()},
+                {new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare()},
+                {new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare()},
+                {new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare(),
+                        new EmptySquare()},
+                {new Pawn(Color.WHITE),
+                        new Pawn(Color.WHITE),
+                        new Pawn(Color.WHITE),
+                        new Pawn(Color.WHITE),
+                        new Pawn(Color.WHITE),
+                        new Pawn(Color.WHITE),
+                        new Pawn(Color.WHITE),
+                        new Pawn(Color.WHITE)},
+                {new Rook(Color.WHITE),
+                        new Knight(Color.WHITE),
+                        new Bishop(Color.WHITE),
+                        new Queen(Color.WHITE),
+                        new King(Color.WHITE),
+                        new Bishop(Color.WHITE),
+                        new Knight(Color.WHITE),
+                        new Rook(Color.WHITE)},
+        };
+        return chessBoard;
+    }
 
     static {
+        initalizeChessboard();
+    }
+
+    public static void initalizeChessboard() {
+
+        chessBoard = getInitalChessBoardPosition();
 
         int whiteKingPosition = 0;
 
@@ -303,8 +314,13 @@ public class Chessboard {
 
     public static void makeMove(Move move) {
         if (move.isPawnPromotion()) {
-            setPiece(1, move.getOldPositionColumn(), new EmptySquare());
-            setPiece(0, move.getNewPositionColumn(), move.getPromotionPiece());
+            if (currentPlayer.equals(getWhitePlayer())) {
+                setPiece(1, move.getOldPositionColumn(), new EmptySquare());
+                setPiece(0, move.getNewPositionColumn(), move.getPromotionPiece());
+            } else {
+                setPiece(6, move.getOldPositionColumn(), new EmptySquare());
+                setPiece(7, move.getNewPositionColumn(), move.getPromotionPiece());
+            }
         } else if (move.isEnPassant()) {
             int sideMoveValue = Chessboard.getCurrentPlayer().getColor().equals(Color.WHITE) ? 1 : -1;
             setPiece(move.getNewPositionRow(), move.getNewPositionColumn(), getPiece(move.getOldPositionRow(), move.getOldPositionColumn()));
@@ -339,8 +355,13 @@ public class Chessboard {
 
     public static void undoMove(Move move) {
         if (move.isPawnPromotion()) {
-            setPiece(1, move.getOldPositionColumn(), new Pawn(currentPlayer.getColor()));
-            setPiece(0, move.getNewPositionColumn(), move.getCapture());
+            if (currentPlayer.equals(getWhitePlayer())) {
+                setPiece(1, move.getOldPositionColumn(), new Pawn(currentPlayer.getColor()));
+                setPiece(0, move.getNewPositionColumn(), move.getCapture());
+            } else {
+                setPiece(6, move.getOldPositionColumn(), new Pawn(currentPlayer.getColor()));
+                setPiece(7, move.getNewPositionColumn(), move.getCapture());
+            }
         } else if (move.isEnPassant()) {
             int sideMoveValue = Chessboard.getCurrentPlayer().getColor().equals(Color.WHITE) ? 1 : -1;
             setPiece(move.getOldPositionRow(), move.getOldPositionColumn(), move.getPieceThatMoves());
