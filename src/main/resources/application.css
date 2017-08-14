@@ -1,0 +1,39 @@
+.lightSquare{
+  -fx-background-color:
+        linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
+        linear-gradient(#020b02, #3a3a3a),
+        linear-gradient(#FFC864 10.0%, #FFC858 40.0%, #FFC041 60.0%, #FFB829 100.0%);
+    -fx-effect: dropshadow( three-pass-box , rgba(255.0,255.0,255.0,0.2) , 1.0, 0.0 , 0.0 , 1.0);
+    -fx-border-radius: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+}
+
+.lightSquare:selected{
+    -fx-background-color:
+    linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
+    linear-gradient(#020b02, #3a3a3a),
+    linear-gradient(#70F393 10.0%, #53EC7C 40.0%, #2CE85E 60.0%, #04E540 100.0%);
+    -fx-effect: dropshadow( three-pass-box , rgba(255.0,255.0,255.0,0.2) , 1.0, 0.0 , 0.0 , 1.0);
+    -fx-border-radius: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+}
+
+.darkSquare{
+    -fx-background-color:
+    linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
+    linear-gradient(#020b02, #3a3a3a),
+    linear-gradient(#96321E 10.0%, #972711 40.0%, #9A2109 60.0%, #981900 100.0%);
+    -fx-effect: dropshadow( three-pass-box , rgba(255.0,255.0,255.0,0.2) , 1.0, 0.0 , 0.0 , 1.0);
+    -fx-border-radius: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+}
+
+.darkSquare:selected{
+    -fx-background-color:
+    linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
+    linear-gradient(#020b02, #3a3a3a),
+    linear-gradient(#70F393 10.0%, #53EC7C 40.0%, #2CE85E 60.0%, #04E540 100.0%);
+    -fx-effect: dropshadow( three-pass-box , rgba(255.0,255.0,255.0,0.2) , 1.0, 0.0 , 0.0 , 1.0);
+    -fx-border-radius: 0 0 0 0;
+    -fx-background-radius: 0 0 0 0;
+}
