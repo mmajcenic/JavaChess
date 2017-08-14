@@ -2,7 +2,6 @@ package hr.tvz.chess.gui;
 
 import hr.tvz.chess.Main;
 import hr.tvz.chess.engine.Castling;
-import hr.tvz.chess.engine.Chessboard;
 import hr.tvz.chess.engine.Move;
 import hr.tvz.chess.engine.algorithms.SearchAlgorithm;
 import hr.tvz.chess.pieces.common.AbstractChessPiece;
@@ -10,29 +9,59 @@ import hr.tvz.chess.pieces.common.Color;
 import hr.tvz.chess.pieces.common.PieceType;
 import hr.tvz.chess.pieces.impl.Queen;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Marko on 12.8.2016..
  */
-public class ChessboardInterface extends Pane {
+public class ChessboardGUI extends Pane {
 
     public int squareSize = 70;
 
-    private static ChessboardInterface instance;
+    private static ChessboardGUI instance;
 
-    public ChessboardInterface() {
+    public ChessboardGUI() {
 
         instance = this;
+        instance.setMinHeight(630);
+        instance.setMinWidth(660);
+        instance.getStyleClass().add("mainChessboard");
+        List<String> labels = new ArrayList<>();
+        labels.add("a\nc0");
+        labels.add("b\nc1");
+        labels.add("c\nc2");
+        labels.add("d\nc3");
+        labels.add("e\nc4");
+        labels.add("f\nc5");
+        labels.add("g\nc6");
+        labels.add("h\nc7");
+        addLabel(75, 10, labels, true);
+        addLabel(75, 620, labels, true);
+        labels.clear();
+        labels.add("8\nr0");
+        labels.add("7\nr1");
+        labels.add("6\nr2");
+        labels.add("5\nr3");
+        labels.add("4\nr4");
+        labels.add("3\nr5");
+        labels.add("2\nr6");
+        labels.add("1\nr7");
+        addLabel(20, 65, labels, false);
+        addLabel(630, 65, labels, false);
 
         final ToggleGroup toggleGroup = new ToggleGroup();
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ToggleButton square = new ToggleButton();
-                square.setLayoutX(j * squareSize);
-                square.setLayoutY(i * squareSize);
+                square.setLayoutX(j * squareSize + 50);
+                square.setLayoutY(i * squareSize + 50);
                 square.setMinSize(squareSize, squareSize);
                 square.setMaxSize(squareSize, squareSize);
                 if ((i + j) % 2 == 0) {
@@ -42,7 +71,7 @@ public class ChessboardInterface extends Pane {
                 }
                 square.setId(String.valueOf(8 * i + j));
                 square.setToggleGroup(toggleGroup);
-                getChildren().add(square);
+                this.getChildren().add(square);
             }
         }
         toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
@@ -55,7 +84,7 @@ public class ChessboardInterface extends Pane {
                 int newMovePosition = newMoveData.getPosition();
 
                 newValue.setSelected(false);
-                Move lastMove = Chessboard.getLastMove();
+                Move lastMove = hr.tvz.chess.engine.Chessboard.getLastMove();
                 Move move = null;
                 if (oldMovePosition / 8 == 1 && newMovePosition / 8 == 0 && oldMoveData.isCurrentPlayerPieceType(PieceType.PAWN)) {
                     move = new Move(oldMovePosition % 8, newMovePosition % 8, newMoveData, getPromotion(oldMoveData), oldMoveData);
@@ -64,7 +93,7 @@ public class ChessboardInterface extends Pane {
                                 - lastMove.getOldPositionRow()) == 2 &&
                         Math.abs(oldMovePosition % 8 - lastMove.getNewPositionColumn()) == 1 &&
                         oldMovePosition / 8 == lastMove.getNewPositionRow()) {
-                    move = new Move(Chessboard.getPiece(oldMovePosition / 8, newMovePosition % 8),
+                    move = new Move(hr.tvz.chess.engine.Chessboard.getPiece(oldMovePosition / 8, newMovePosition % 8),
                             oldMovePosition / 8, oldMovePosition % 8, newMovePosition / 8, newMovePosition % 8, oldMoveData);
                 } else if (oldMoveData.isCurrentPlayerPieceType(PieceType.KING) && Math.abs(oldMovePosition % 8 - newMovePosition % 8) == 2) {
                     if (oldMoveData.getColor().equals(Color.WHITE) && (oldMovePosition % 8 - newMovePosition % 8) == -2) {
@@ -81,13 +110,13 @@ public class ChessboardInterface extends Pane {
                     move = new Move(oldMovePosition / 8, oldMovePosition % 8, newMovePosition / 8, newMovePosition % 8, newMoveData, oldMoveData);
                 }
 
-                if (move != null && Chessboard.generatePossibleMoves().contains(move)) {
+                if (move != null && hr.tvz.chess.engine.Chessboard.generatePossibleMoves().contains(move)) {
 
-                    Chessboard.makeMove(move);
+                    hr.tvz.chess.engine.Chessboard.makeMove(move);
 
                     drawChesspieces();
 
-                    Chessboard.changePlayer();
+                    hr.tvz.chess.engine.Chessboard.changePlayer();
 
                     if (!Main.pvp) {
                         makeAiMove(move);
@@ -109,14 +138,14 @@ public class ChessboardInterface extends Pane {
             SearchAlgorithm.clearTranspositionTable();
             SearchAlgorithm.clearRootTable();
             SearchAlgorithm.clearSortedRootMoves();
-            Chessboard.makeMove(move1);
-            Chessboard.changePlayer();
+            hr.tvz.chess.engine.Chessboard.makeMove(move1);
+            hr.tvz.chess.engine.Chessboard.changePlayer();
             drawChesspieces();
         });
     }
 
     private AbstractChessPiece getPromotion(AbstractChessPiece chessPiece) {
-        Queen queen = new Queen(Chessboard.getCurrentPlayer().getColor());
+        Queen queen = new Queen(hr.tvz.chess.engine.Chessboard.getCurrentPlayer().getColor());
         if (chessPiece.getImage().equals(ImageFile.BLACK_PAWN)) {
             queen.setImage(ImageFile.BLACK_QUEEN);
         } else {
@@ -135,15 +164,33 @@ public class ChessboardInterface extends Pane {
         }
     }
 
+    private void addLabel(long xLabel, long yLabel, List<String> labels, boolean movesHorizontally) {
+        Label label;
+        for(String labelString : labels) {
+            label = new Label(labelString);
+            label.setStyle("-fx-font-weight: bold");
+            label.setLayoutX(xLabel);
+            label.setLayoutY(yLabel);
+            this.getChildren().add(label);
+            if(movesHorizontally) {
+                xLabel += 70;
+            } else {
+                yLabel += 70;
+            }
+        }
+    }
+
+
+
     private void drawSquare(int i) {
         ToggleButton toggleButton = (ToggleButton) instance.getScene().lookup(String.format("#%d", i));
-        if (!Chessboard.isEmptyPiece(i / 8, i % 8)) {
-            toggleButton.setGraphic(new ChessPieceImage(Chessboard.getPiece(i / 8, i % 8).getImage()).getImageView());
+        if (!hr.tvz.chess.engine.Chessboard.isEmptyPiece(i / 8, i % 8)) {
+            toggleButton.setGraphic(new ChessPieceImage(hr.tvz.chess.engine.Chessboard.getPiece(i / 8, i % 8).getImage()).getImageView());
         } else {
             toggleButton.setGraphic(null);
         }
-        Chessboard.getPiece(i / 8, i % 8).setPosition(i);
-        toggleButton.setUserData(Chessboard.getPiece(i / 8, i % 8));
+        hr.tvz.chess.engine.Chessboard.getPiece(i / 8, i % 8).setPosition(i);
+        toggleButton.setUserData(hr.tvz.chess.engine.Chessboard.getPiece(i / 8, i % 8));
         if (!Main.isWhiteIsHuman()) {
             toggleButton.setRotate(180);
         }

@@ -1,3 +1,77 @@
+.main {
+    -fx-background-color: burlywood;
+    -fx-font-weight: bold;
+}
+
+.toolbar {
+    -fx-background-color: linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
+    linear-gradient(#020b02, #3a3a3a),
+    linear-gradient(#96321E 10.0%, #972711 40.0%, #9A2109 60.0%, #981900 100.0%);
+}
+
+.glass-grey {
+    -fx-background-color: #c3c4c4,
+    linear-gradient(#d6d6d6 50%, white 100%),
+    radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230, 230, 230, 0) 50%);
+    -fx-background-radius: 30;
+    -fx-background-insets: 0, 1, 1;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
+}
+
+.table-view {
+    -fx-border-width: 0 0 0 0;
+    -fx-background-color: transparent;
+}
+
+.radio-button .radio {
+    -fx-background-color: linear-gradient(#FFC864 10.0%, #FFC858 40.0%, #FFC041 60.0%, #FFB829 100.0%);
+}
+
+.table-view:focused {
+    -fx-background-color: transparent;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: linear-gradient(#96321E 10.0%, #972711 40.0%, #9A2109 60.0%, #981900 100.0%);
+}
+
+.table-view .column-header-background .label {
+    -fx-alignment: center-left;
+    -fx-background-color: transparent;
+    -fx-text-fill: linear-gradient(#FFC864 10.0%, #FFC858 40.0%, #FFC041 60.0%, #FFB829 100.0%);
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: black;
+}
+
+.table-row-cell {
+    -fx-background-color: -fx-table-cell-border-color, linear-gradient(#FFC864 10.0%, #FFC858 40.0%, #FFC041 60.0%, #FFB829 100.0%);
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em; /* 0 */
+    -fx-border-color: black;
+    -fx-table-cell-border-color:black;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: -fx-table-cell-border-color, linear-gradient(#FFC864 10.0%, #FFC858 40.0%, #FFC041 60.0%, #FFB829 100.0%);
+    -fx-background-insets: 0, 0 0 0 0;
+    -fx-padding: 0.0em; /* 0 */
+    -fx-border-color: black;
+}
+
+
+
+.mainChessboard {
+    -fx-border-width: 0 2 0 0;
+    -fx-border-color: black;
+}
+
 .lightSquare{
   -fx-background-color:
         linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),

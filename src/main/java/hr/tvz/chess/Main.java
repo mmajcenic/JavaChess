@@ -5,13 +5,23 @@ import hr.tvz.chess.engine.Chessboard;
 import hr.tvz.chess.engine.Move;
 import hr.tvz.chess.engine.algorithms.AlphaBetaWithIterativeDeepening;
 import hr.tvz.chess.engine.algorithms.SearchAlgorithm;
-import hr.tvz.chess.gui.ChessboardInterface;
+import hr.tvz.chess.gui.ChessboardGUI;
 import hr.tvz.chess.gui.DialogHandler;
-import hr.tvz.chess.pieces.impl.EmptySquare;
+import hr.tvz.chess.gui.UserControls;
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToolBar;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
@@ -19,28 +29,56 @@ public class Main extends Application {
     public static boolean pvp = false;
     private static SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening();
 
+    private double xOffset = 0;
+    private double yOffset = 0;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        primaryStage.setTitle("JavaFX Chess");
 
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> Platform.exit());
+        closeButton.getStyleClass().add("lightSquare");
+        Label label = new Label("JavaFX Chess");
+        label.setTextFill(Color.web("#FFC864"));
+        label.setStyle("-fx-font-weight: bold; -fx-padding: 4 0 0 0");
+        HBox hBox = new HBox();
+        hBox.setPadding(new Insets(10, 16, 10, 16));
+        hBox.setSpacing(900);
+        hBox.getChildren().add(label);
+        hBox.getChildren().add(closeButton);
+        hBox.getStyleClass().add("toolbar");
         BorderPane root = new BorderPane();
-
-        ChessboardInterface chessboardInterface = new ChessboardInterface();
-
-        root.setLeft(chessboardInterface);
+        root.setTop(hBox);
+        root.getStyleClass().add("main");
+        ChessboardGUI chessboardGUI = new ChessboardGUI();
+        root.setLeft(chessboardGUI);
+        UserControls userControls = new UserControls();
+        root.setRight(userControls);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         scene.getStylesheets().add("application.css");
-        primaryStage.setTitle("JavaFX Chess");
+
+        scene.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset = event.getSceneY();
+        });
+        scene.setOnMouseDragged(event -> {
+            primaryStage.setX(event.getScreenX() - xOffset);
+            primaryStage.setY(event.getScreenY() - yOffset);
+        });
+
         primaryStage.show();
         Chessboard.setCurrentPlayer(Chessboard.getWhitePlayer());
-
-        DialogHandler.showChooseSideDialog();
-        DialogHandler.showPickAlgorithmDialog();
+//
+//        DialogHandler.showChooseSideDialog();
+//        DialogHandler.showPickAlgorithmDialog();
 
         if (whiteIsHuman) {
-            chessboardInterface.drawChesspieces();
+            chessboardGUI.drawChesspieces();
         } else {
-            chessboardInterface.makeAiMove(new Move());
+            chessboardGUI.makeAiMove(new Move());
         }
 
     }
