@@ -15,7 +15,7 @@ public class ZobristHashingTest {
 
     @Test
     public void testHashing() {
-        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening();
+        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening(6000);
         Chessboard.setCurrentPlayer(Chessboard.getWhitePlayer());
         long firstZobrist = Zobrist.getZobristHash();
         Move move = searchAlgorithm.search(new Move());

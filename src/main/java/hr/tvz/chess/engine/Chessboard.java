@@ -1,5 +1,6 @@
 package hr.tvz.chess.engine;
 
+import hr.tvz.chess.Main;
 import hr.tvz.chess.pieces.common.AbstractChessPiece;
 import hr.tvz.chess.pieces.common.Color;
 import hr.tvz.chess.pieces.common.PieceType;
@@ -107,6 +108,16 @@ public class Chessboard {
 
     public static void initalizeChessboard() {
 
+        moveHistory.clear();
+
+        whiteCastlingKingSide = true;
+
+        whiteCastlingQueenSide = true;
+
+        blackCastlingKingSide = true;
+
+        blackCastlingQueenSide = true;
+
         chessBoard = getInitalChessBoardPosition();
 
         int whiteKingPosition = 0;
@@ -187,7 +198,18 @@ public class Chessboard {
                 moves.addAll(chessBoard[i / 8][i % 8].getPossibleMoves(i));
             }
         }
-        return moves;
+
+        List<Move> trunactedList = new ArrayList<>(moves);
+        if((Main.isWhiteIsHuman() && currentPlayer.getColor().equals(Color.BLACK))
+                || (!Main.isWhiteIsHuman() && currentPlayer.getColor().equals(Color.WHITE))) {
+            for (Move move : moves) {
+                long count = moveHistory.subList(Math.max(moveHistory.size() - 8, 0), moveHistory.size()).stream().filter(moveInList -> moveInList.equals(move)).count();
+                if (count > 2) {
+                    trunactedList.remove(move);
+                }
+            }
+        }
+        return trunactedList;
     }
 
     public static boolean canEnPassant(int c) {
@@ -198,7 +220,7 @@ public class Chessboard {
                 ((Chessboard.isInChessboard(lastMove.getNewPositionRow() - 1, lastMove.getNewPositionColumn())
                         && Chessboard.getPiece(lastMove.getNewPositionRow() - 1, lastMove.getNewPositionColumn()).isOppositePlayerPieceType(PieceType.PAWN))
                         || (Chessboard.isInChessboard(lastMove.getNewPositionRow() + 1, lastMove.getNewPositionColumn()) &&
-                                Chessboard.getPiece(lastMove.getNewPositionRow() + 1, lastMove.getNewPositionColumn()).isOppositePlayerPieceType(PieceType.PAWN)));
+                        Chessboard.getPiece(lastMove.getNewPositionRow() + 1, lastMove.getNewPositionColumn()).isOppositePlayerPieceType(PieceType.PAWN)));
     }
 
     public static boolean kingSafe() {

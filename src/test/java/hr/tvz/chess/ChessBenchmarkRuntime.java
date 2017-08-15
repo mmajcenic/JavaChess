@@ -49,7 +49,7 @@ public class ChessBenchmarkRuntime {
 
     @Benchmark
     void iterativeDeepening(long reps) {
-        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening();
+        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening(6000);
         for (int i = 0; i < reps; i++) {
             searchAlgorithm.search(new Move());
             SearchAlgorithm.clearTranspositionTable();

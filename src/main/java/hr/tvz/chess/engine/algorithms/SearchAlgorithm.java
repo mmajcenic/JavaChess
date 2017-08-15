@@ -67,4 +67,7 @@ public abstract class SearchAlgorithm {
         return maximumSearchDepth;
     }
 
+    public static void setMaximumSearchDepth(int maximumSearchDepth) {
+        SearchAlgorithm.maximumSearchDepth = maximumSearchDepth;
+    }
 }

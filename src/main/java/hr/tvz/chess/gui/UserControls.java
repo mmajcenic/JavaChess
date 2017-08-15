@@ -3,10 +3,7 @@ package hr.tvz.chess.gui;
 import hr.tvz.chess.Main;
 import hr.tvz.chess.engine.Chessboard;
 import hr.tvz.chess.engine.Move;
-import hr.tvz.chess.engine.algorithms.AlphaBeta;
-import hr.tvz.chess.engine.algorithms.AlphaBetaWithIterativeDeepening;
-import hr.tvz.chess.engine.algorithms.AlphaBetaWithTransposition;
-import hr.tvz.chess.engine.algorithms.Minimax;
+import hr.tvz.chess.engine.algorithms.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
@@ -21,6 +18,9 @@ public class UserControls extends Pane {
 
     private String algorithm;
     private String player;
+    private int depth;
+    private TextField timeLimit = new TextField();
+    private Label timelimitLabel = new Label("Time limit (ms) ");
 
     public UserControls() {
         this.setMinWidth(400);
@@ -34,6 +34,7 @@ public class UserControls extends Pane {
         final ToggleGroup algorithmToggle = new ToggleGroup();
         algorithmToggle.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             this.algorithm = (String) newValue.getUserData();
+            setTimeLimitVisibility();
         });
         RadioButton minimax = new RadioButton("Minimax");
         minimax.setUserData("minimax");
@@ -148,6 +149,67 @@ public class UserControls extends Pane {
         clearHistory.getStyleClass().add("lightSquare");
         this.getChildren().add(clearHistory);
 
+
+        final ToggleGroup depthToggle = new ToggleGroup();
+        depthToggle.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            this.depth = (Integer) newValue.getUserData();
+        });
+        RadioButton zero = new RadioButton("0");
+        zero.setUserData(0);
+        zero.setLayoutY(40);
+        zero.setLayoutX(300);
+        zero.setToggleGroup(depthToggle);
+
+        RadioButton two = new RadioButton("2");
+        two.setUserData(2);
+        two.setLayoutY(60);
+        two.setLayoutX(300);
+        two.setToggleGroup(depthToggle);
+
+        RadioButton four = new RadioButton("4");
+        four.setUserData(4);
+        four.setLayoutY(80);
+        four.setLayoutX(300);
+        four.setToggleGroup(depthToggle);
+        four.setSelected(true);
+
+        RadioButton six = new RadioButton("6");
+        six.setUserData(6);
+        six.setLayoutY(100);
+        six.setLayoutX(300);
+        six.setToggleGroup(depthToggle);
+
+        this.getChildren().add(zero);
+        this.getChildren().add(two);
+        this.getChildren().add(four);
+        this.getChildren().add(six);
+
+        Label depthLabel = new Label("Depth");
+        depthLabel.setStyle("-fx-font-weight: bold");
+        depthLabel.setLayoutX(300);
+        depthLabel.setLayoutY(15);
+        this.getChildren().add(depthLabel);
+
+        timelimitLabel.setStyle("-fx-font-weight: bold");
+        timelimitLabel.setLayoutX(160);
+        timelimitLabel.setLayoutY(15);
+        this.getChildren().add(timelimitLabel);
+        timeLimit.setLayoutX(160);
+        timeLimit.setLayoutY(40);
+        timeLimit.setText("6000");
+        timeLimit.setMaxWidth(100);
+        this.getChildren().add(timeLimit);
+        setTimeLimitVisibility();
+    }
+
+    private void setTimeLimitVisibility() {
+        if (algorithm.equals("iterativeDeepening")) {
+            timeLimit.setVisible(true);
+            timelimitLabel.setVisible(true);
+        } else {
+            timeLimit.setVisible(false);
+            timelimitLabel.setVisible(false);
+        }
     }
 
     public void addMoveToHistory(MoveHistoryEntry moveHistoryEntry) {
@@ -167,7 +229,11 @@ public class UserControls extends Pane {
                 Main.setSearchAlgorithm(new AlphaBetaWithTransposition());
                 break;
             case "iterativeDeepening":
-                Main.setSearchAlgorithm(new AlphaBetaWithIterativeDeepening());
+                if (timeLimit.getText().matches("\\d+")) {
+                    Main.setSearchAlgorithm(new AlphaBetaWithIterativeDeepening(Integer.valueOf(timeLimit.getText())));
+                } else {
+                    Main.setSearchAlgorithm(new AlphaBetaWithIterativeDeepening(6000));
+                }
                 break;
         }
         switch (player) {
@@ -184,6 +250,7 @@ public class UserControls extends Pane {
                 Main.setPvp(true);
                 break;
         }
+        SearchAlgorithm.setMaximumSearchDepth(depth);
         Chessboard.initalizeChessboard();
         ChessboardGUI chessboardGUI = (ChessboardGUI) this.getScene().lookup("#chessboard");
         Chessboard.setCurrentPlayer(Chessboard.getWhitePlayer());

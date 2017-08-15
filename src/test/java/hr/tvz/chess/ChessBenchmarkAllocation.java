@@ -44,7 +44,7 @@ public class ChessBenchmarkAllocation {
 
     @Benchmark
     void iterativeDeepening() {
-        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening();
+        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening(6000);
         searchAlgorithm.search(new Move());
         SearchAlgorithm.clearTranspositionTable();
     }

@@ -173,7 +173,6 @@ public class Move {
         if (isPawnPromotion != move.isPawnPromotion) return false;
         if (isEnPassant != move.isEnPassant) return false;
         if (isCastling != move.isCastling) return false;
-        if (value != move.value) return false;
         if (pieceThatMoves != null ? !pieceThatMoves.equals(move.pieceThatMoves) : move.pieceThatMoves != null)
             return false;
         if (capture != null ? !capture.equals(move.capture) : move.capture != null) return false;
@@ -194,7 +193,6 @@ public class Move {
         result = 31 * result + (isEnPassant ? 1 : 0);
         result = 31 * result + (isCastling ? 1 : 0);
         result = 31 * result + (promotionPiece != null ? promotionPiece.hashCode() : 0);
-        result = 31 * result + value;
         result = 31 * result + (castling != null ? castling.hashCode() : 0);
         return result;
     }

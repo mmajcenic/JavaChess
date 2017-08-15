@@ -3,20 +3,31 @@
     -fx-font-weight: bold;
 }
 
+.text-input {
+    -fx-text-fill: -fx-text-inner-color;
+    -fx-highlight-fill: derive(-fx-control-inner-background,-20%);
+    -fx-highlight-text-fill: -fx-text-inner-color;
+    -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
+    -fx-background-color: linear-gradient(#FFC864 10.0%, #FFC858 40.0%, #FFC041 60.0%, #FFB829 100.0%);
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 3, 2;
+    -fx-cursor: text;
+    -fx-font-weight: bold;
+    -fx-padding: 0.333333em 0.583em 0.333333em 0.583em; /* 4 7 4 7 */
+}
+.text-input:focused {
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+    -fx-background-color: linear-gradient(#FFC864 10.0%, #FFC858 40.0%, #FFC041 60.0%, #FFB829 100.0%);
+    -fx-background-insets: -0.2, 1, -1.4, 3;
+    -fx-background-radius: 3, 2, 4, 0;
+    -fx-prompt-text-fill: transparent;
+}
+
 .toolbar {
     -fx-background-color: linear-gradient(#686868 0.0%, #232723 25.0%, #373837 75.0%, #757575 100.0%),
     linear-gradient(#020b02, #3a3a3a),
     linear-gradient(#96321E 10.0%, #972711 40.0%, #9A2109 60.0%, #981900 100.0%);
-}
-
-.glass-grey {
-    -fx-background-color: #c3c4c4,
-    linear-gradient(#d6d6d6 50%, white 100%),
-    radial-gradient(center 50% -40%, radius 200%, #e6e6e6 45%, rgba(230, 230, 230, 0) 50%);
-    -fx-background-radius: 30;
-    -fx-background-insets: 0, 1, 1;
-    -fx-text-fill: black;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
 }
 
 .table-view {

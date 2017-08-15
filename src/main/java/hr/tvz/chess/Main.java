@@ -23,7 +23,7 @@ public class Main extends Application {
 
     private static boolean whiteIsHuman = true;
     private static boolean pvp = false;
-    private static SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening();
+    private static SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening(6000);
     private double xOffset = 0;
     private double yOffset = 0;
     private ChessboardGUI chessboardGUI;

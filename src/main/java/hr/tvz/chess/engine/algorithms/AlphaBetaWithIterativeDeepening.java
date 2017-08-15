@@ -20,6 +20,10 @@ public class AlphaBetaWithIterativeDeepening extends SearchAlgorithm {
 
     private static Move bestMoveFromIteration;
 
+    public AlphaBetaWithIterativeDeepening(int maxtime) {
+        AlphaBetaWithIterativeDeepening.maxTime = maxtime;
+    }
+
     private static Move alphaBeta(int depth, int alpha, int beta, Move move, boolean maximizes) {
         List<Move> moves;
         if (depth == iterativeDeepeningMaxDepth && depth != 0) {

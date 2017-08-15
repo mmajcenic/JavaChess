@@ -47,7 +47,7 @@ public class TestAlgorithms {
     public void iterative() {
         System.out.println("===Iterative===");
         Chessboard.setCurrentPlayer(Chessboard.getWhitePlayer());
-        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening();
+        SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening(6000);
         searchAlgorithm.search(new Move());
         SearchAlgorithm.getMoveCounter().forEach((k, v) -> {
             System.out.println("Depth: " + (SearchAlgorithm.getMaximumSearchDepth() - k) + "; positions: " + v);

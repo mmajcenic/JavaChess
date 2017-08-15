@@ -79,7 +79,7 @@ public class ChessboardGUI extends Pane {
             }
         }
         toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null && newValue != null && !((AbstractChessPiece) oldValue.getUserData()).isEmpty()) {
+            if (oldValue != null && newValue != null && oldValue.getUserData() != null && !((AbstractChessPiece) oldValue.getUserData()).isEmpty()) {
 
                 AbstractChessPiece oldMoveData = (AbstractChessPiece) oldValue.getUserData();
                 AbstractChessPiece newMoveData = (AbstractChessPiece) newValue.getUserData();
@@ -137,7 +137,7 @@ public class ChessboardGUI extends Pane {
                 }
 
 
-            } else if (newValue != null && ((AbstractChessPiece) newValue.getUserData()).isEmpty()) {
+            } else if (newValue != null && newValue.getUserData() != null && ((AbstractChessPiece) newValue.getUserData()).isEmpty()) {
                 newValue.setSelected(false);
             }
 
@@ -151,6 +151,10 @@ public class ChessboardGUI extends Pane {
             Move move1 = Main.getSearchAlgorithm().search(move);
             long elapsed = System.currentTimeMillis() - now;
             UserControls userControls = (UserControls) this.getScene().lookup("#controls");
+            List<Move> moves = Chessboard.generatePossibleMoves();
+            if(!moves.contains(move1)) {
+                move1 = SearchAlgorithm.sortMoves(moves).get(0);
+            }
             String notation = String.format("r%dc%d -> r%dc%d",
                     move1.getOldPositionRow(),
                     move1.getOldPositionColumn(),
@@ -185,14 +189,14 @@ public class ChessboardGUI extends Pane {
         if (!Main.isWhiteIsHuman()) {
             instance.setRotate(180);
             instance.getChildren().forEach(node -> {
-                if(node instanceof Label) {
+                if (node instanceof Label) {
                     node.setRotate(180);
                 }
             });
         } else {
             instance.setRotate(0);
             instance.getChildren().forEach(node -> {
-                if(node instanceof Label) {
+                if (node instanceof Label) {
                     node.setRotate(0);
                 }
             });
@@ -201,20 +205,19 @@ public class ChessboardGUI extends Pane {
 
     private void addLabel(long xLabel, long yLabel, List<String> labels, boolean movesHorizontally) {
         Label label;
-        for(String labelString : labels) {
+        for (String labelString : labels) {
             label = new Label(labelString);
             label.setStyle("-fx-font-weight: bold");
             label.setLayoutX(xLabel);
             label.setLayoutY(yLabel);
             this.getChildren().add(label);
-            if(movesHorizontally) {
+            if (movesHorizontally) {
                 xLabel += 70;
             } else {
                 yLabel += 70;
             }
         }
     }
-
 
 
     private void drawSquare(int i) {
