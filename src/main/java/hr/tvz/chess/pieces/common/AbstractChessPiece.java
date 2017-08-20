@@ -12,21 +12,14 @@ import java.util.List;
  */
 public abstract class AbstractChessPiece {
 
-    //polja
-
-    //boja figure
     private Color color;
 
-    //tip figure
     private PieceType type;
 
-    //slika za grafički prikaz
     private ImageFile image;
 
-    //pozicija na ploči
     private int position;
 
-    //konstruktori
     public AbstractChessPiece(Color color, PieceType type) {
         this.color = color;
         this.type = type;
@@ -37,29 +30,23 @@ public abstract class AbstractChessPiece {
         this.type = type;
     }
 
-    //metoda za dohvaćanje mogućih poteza
     public abstract List<Move> getPossibleMoves(int i);
 
     public Color getColor() {
         return color;
     }
 
-    //metoda koja provjerava da li je figura praznoga tipa
     public boolean isEmpty(){
         return getType() == PieceType.EMPTY;
     }
 
-    //metoda koja provjerava da li je figura protivnička i odgovarajućeg tipa
     public boolean isOppositePlayerPieceType(PieceType type) {
         return !isEmpty() && (Chessboard.getCurrentPlayer().getColor() != getColor() && type == getType());
     }
 
-    //metoda koja provjerava da li figura pripada trenutnom igraču i odgovarajućeg tipa
     public boolean isCurrentPlayerPieceType(PieceType type) {
         return !isEmpty() && (Chessboard.getCurrentPlayer().getColor() == getColor() && type == getType());
     }
-
-    //metode za dohvaćanje i mijenjanje polja
 
     private void setImage() {
         if (color.equals(Color.BLACK) && getClass() == King.class) {

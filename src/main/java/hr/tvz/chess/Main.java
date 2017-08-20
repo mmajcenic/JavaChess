@@ -26,7 +26,6 @@ public class Main extends Application {
     private static SearchAlgorithm searchAlgorithm = new AlphaBetaWithIterativeDeepening(6000);
     private double xOffset = 0;
     private double yOffset = 0;
-    private ChessboardGUI chessboardGUI;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -48,7 +47,7 @@ public class Main extends Application {
         BorderPane root = new BorderPane();
         root.setTop(hBox);
         root.getStyleClass().add("main");
-        chessboardGUI = new ChessboardGUI();
+        ChessboardGUI chessboardGUI = new ChessboardGUI();
         root.setLeft(chessboardGUI);
         UserControls userControls = new UserControls();
         root.setRight(userControls);
