@@ -194,7 +194,8 @@ public class Chessboard {
     public static List<Move> generatePossibleMoves() {
         List<Move> moves = new ArrayList<>();
         for (int i = 0; i < 64; i++) {
-            if (!chessBoard[i / 8][i % 8].isEmpty() && chessBoard[i / 8][i % 8].getColor().equals(currentPlayer.getColor())) {
+            if (!chessBoard[i / 8][i % 8].isEmpty() && chessBoard[i / 8][i % 8].
+                    getColor().equals(currentPlayer.getColor())) {
                 moves.addAll(chessBoard[i / 8][i % 8].getPossibleMoves(i));
             }
         }
@@ -203,7 +204,8 @@ public class Chessboard {
         if((Main.isWhiteIsHuman() && currentPlayer.getColor().equals(Color.BLACK))
                 || (!Main.isWhiteIsHuman() && currentPlayer.getColor().equals(Color.WHITE))) {
             for (Move move : moves) {
-                long count = moveHistory.subList(Math.max(moveHistory.size() - 8, 0), moveHistory.size()).stream().filter(moveInList -> moveInList.equals(move)).count();
+                long count = moveHistory.subList(Math.max(moveHistory.size() - 8, 0), moveHistory.size())
+                        .stream().filter(moveInList -> moveInList.equals(move)).count();
                 if (count > 2) {
                     trunactedList.remove(move);
                 }

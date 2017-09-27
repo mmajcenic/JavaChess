@@ -116,7 +116,6 @@ public abstract class AbstractChessPiece {
 
         AbstractChessPiece that = (AbstractChessPiece) o;
 
-        if (position != that.position) return false;
         if (color != that.color) return false;
         if (type != that.type) return false;
         return image == that.image;
@@ -128,7 +127,6 @@ public abstract class AbstractChessPiece {
         int result = color != null ? color.hashCode() : 0;
         result = 31 * result + type.hashCode();
         result = 31 * result + (image != null ? image.hashCode() : 0);
-        result = 31 * result + position;
         return result;
     }
 }
